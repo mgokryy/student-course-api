@@ -3,11 +3,12 @@
   "info": {
     "title": "StudentCourseAPI",
     "version": "1.0.0",
-    "description": "API pour gérer les étudiants et les cours"
+    "description": "API pour gérer les étudiants, les cours et leurs inscriptions"
   },
   "tags": [
     { "name": "Courses", "description": "Gestion des cours" },
-    { "name": "Students", "description": "Gestion des étudiants" }
+    { "name": "Students", "description": "Gestion des étudiants" },
+    { "name": "Enrollments", "description": "Gestion des inscriptions entre étudiants et cours" }
   ],
   "paths": {
     "/courses": {
@@ -186,6 +187,34 @@
           "204": { "description": "Supprimé avec succès" },
           "400": { "description": "Impossible de supprimer (inscrit à un cours)" },
           "404": { "description": "Étudiant non trouvé" }
+        }
+      }
+    },
+
+    "/courses/{courseId}/students/{studentId}": {
+      "post": {
+        "tags": ["Enrollments"],
+        "summary": "Inscrire un étudiant à un cours",
+        "parameters": [
+          { "name": "courseId", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID du cours" },
+          { "name": "studentId", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID de l'étudiant" }
+        ],
+        "responses": {
+          "201": { "description": "Étudiant inscrit avec succès" },
+          "400": { "description": "Erreur (cours plein ou étudiant déjà inscrit)" },
+          "404": { "description": "Cours ou étudiant non trouvé" }
+        }
+      },
+      "delete": {
+        "tags": ["Enrollments"],
+        "summary": "Désinscrire un étudiant d’un cours",
+        "parameters": [
+          { "name": "courseId", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID du cours" },
+          { "name": "studentId", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID de l'étudiant" }
+        ],
+        "responses": {
+          "204": { "description": "Désinscription réussie" },
+          "404": { "description": "Inscription non trouvée" }
         }
       }
     }
